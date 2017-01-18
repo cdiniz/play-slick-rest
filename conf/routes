@@ -3,5 +3,5 @@
 # ~~~~
 
 # An example controller showing how to write asynchronous code
-GET     /supplier/:id                 controllers.SuppliersController.supplier(id : Long)
+GET     /supplier/:id                 controllers.SuppliersController.supplier(id : Int)
 POST    /supplier                    controllers.SuppliersController.insertSupplier

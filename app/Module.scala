@@ -1,11 +1,10 @@
-import com.google.inject.name.Names
-import com.google.inject.{AbstractModule, Provides}
+import com.google.inject.{AbstractModule, Inject, Provides}
 import java.time.Clock
 
-import models.daos.{AbstractBaseDAO, BaseDAO}
-import models.entities.Supplier
-import models.persistence.SlickTables
-import models.persistence.SlickTables.SuppliersTable
+import models.entities.{DBExecuter, SupplierRepository}
+import play.api.{Configuration, Environment}
+import play.api.db.slick.DatabaseConfigProvider
+import slick.driver.JdbcProfile
 
 
 /**
@@ -18,19 +17,14 @@ import models.persistence.SlickTables.SuppliersTable
  * adding `play.modules.enabled` settings to the `application.conf`
  * configuration file.
  */
-class Module extends AbstractModule {
-
-  import SlickTables.suppliersTableQ
+class Module (environment: Environment,
+                       configuration: Configuration) extends AbstractModule {
 
   override def configure() = {
     // Use the system clock as the default implementation of Clock
     bind(classOf[Clock]).toInstance(Clock.systemDefaultZone)
+    bind(classOf[SupplierRepository]).asEagerSingleton()
+    bind(classOf[DBExecuter]).asEagerSingleton()
   }
 
- @Provides
- def provideSuppliersDAO : AbstractBaseDAO[SuppliersTable,Supplier] = new BaseDAO[SuppliersTable,Supplier]
-
 }
-
-
-
