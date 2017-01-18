@@ -1,10 +1,11 @@
 import com.google.inject.{AbstractModule, Inject, Provides}
 import java.time.Clock
 
-import models.entities.{DBExecuter, SupplierRepository}
+import models.entities.SupplierRepository
 import play.api.{Configuration, Environment}
-import play.api.db.slick.DatabaseConfigProvider
-import slick.driver.JdbcProfile
+import util.DBImplicits
+
+import scala.concurrent.Future
 
 
 /**
@@ -24,7 +25,7 @@ class Module (environment: Environment,
     // Use the system clock as the default implementation of Clock
     bind(classOf[Clock]).toInstance(Clock.systemDefaultZone)
     bind(classOf[SupplierRepository]).asEagerSingleton()
-    bind(classOf[DBExecuter]).asEagerSingleton()
+    bind(classOf[DBImplicits]).asEagerSingleton()
   }
 
 }

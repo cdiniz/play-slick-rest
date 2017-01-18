@@ -28,12 +28,3 @@ class SupplierRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) ext
     def * = (id.?, name, desc) <> ((Supplier.apply _).tupled, Supplier.unapply)
   }
 }
-
-class DBExecuter @Inject()(dbConfigProvider: DatabaseConfigProvider) {
-  val driver: JdbcProfile = dbConfigProvider.get[JdbcProfile].driver
-  import driver.api._
-
-  implicit def executeOperation[T](databaseOperation: DBIO[T]): Future[T] = {
-    dbConfigProvider.get[JdbcProfile].db.run(databaseOperation)
-  }
-}

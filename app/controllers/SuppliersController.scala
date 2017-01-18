@@ -2,16 +2,15 @@ package controllers
 
 import javax.inject._
 
-import models.entities.{DBExecuter, Supplier, SupplierRepository}
-import play.api.db.slick.DatabaseConfigProvider
+import models.entities.{Supplier, SupplierRepository}
 import play.api.libs.json.{Json, Writes}
 import play.api.mvc._
-import slick.driver.JdbcProfile
-
-import scala.concurrent.{ExecutionContext, Future}
+import util.DBImplicits
+import scala.concurrent.Future
+import play.api.libs.concurrent.Execution.Implicits._
 
 @Singleton
-class SuppliersController @Inject()(suppliersDAO : SupplierRepository, dbExecuter: DBExecuter)(implicit exec: ExecutionContext) extends Controller {
+class SuppliersController @Inject()(suppliersDAO : SupplierRepository, dbExecuter: DBImplicits) extends Controller {
   import dbExecuter.executeOperation
 
   implicit val supplierWrites = new Writes[Supplier] {
@@ -27,19 +26,20 @@ class SuppliersController @Inject()(suppliersDAO : SupplierRepository, dbExecute
   }
 
   def insertSupplier = Action.async(parse.json) {
-    request =>
-//      {
-//        for {
-//          name <- (request.body \ "name").asOpt[String]
-//          desc <- (request.body \ "desc").asOpt[String]
-//        } yield {
-//          (suppliersDAO.save(Supplier(None, name, desc))) map { n  => Created("Id of Supplier Added : " + n) }.recoverWith {
-//            case e => Future {
-//              InternalServerError("There was an error at the server")
-//            }
-//          }
-//        }
-//      }.getOrElse(Future{BadRequest("Wrong json format")})
-      Future{BadRequest("Wrong json format")}
+    request => {
+      for {
+        name <- (request.body \ "name").asOpt[String]
+        desc <- (request.body \ "desc").asOpt[String]
+      } yield {
+        suppliersDAO.save(Supplier(None, name, desc)).mapTo[Supplier] map {
+          sup => Created("Id of Supplier Added : " + sup.id.getOrElse(0))
+        } recoverWith {
+          case _ => Future { InternalServerError("Something wrong on server")}
+        }
+      }
+    }.getOrElse(Future {
+      BadRequest("Wrong json format")
+    })
   }
+
 }
