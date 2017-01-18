@@ -4,8 +4,7 @@ The Play Slick Rest is a very simple json rest api showing one way of using Play
 
 It supports the following features:
 
-* Generic Data Access Objects, create a DAOS with crud for an entity with just one line using DI
-* Models as case classes and slick models, independent from database driver and profile
+* Generic Data Access layer, using [slick-repo](https://github.com/gonmarques/slick-repo)
 
 The project was thought to be used as an activator template.
 
@@ -29,12 +28,7 @@ To run all tests (routes and persistence tests):
 
 	curl localhost:9000/supplier/1
 
-#TODO
-
-Tests
-tableQ in BaseDAO as implicit val
 
 #Credits
 
-To make this template, I just mixed the play scala template with play slick.
-
+To make this template, I just mixed tutorials and templates, so credits for play and slick guys and slick-repo owner.
