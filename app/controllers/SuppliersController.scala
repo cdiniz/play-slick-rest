@@ -2,10 +2,12 @@ package controllers
 
 import javax.inject._
 
-import models.entities.{Supplier, SupplierRepository}
+import models.entities.Supplier
+import models.repos.SupplierRepository
 import play.api.libs.json.{Json, Writes}
 import play.api.mvc._
 import util.DBImplicits
+
 import scala.concurrent.Future
 import play.api.libs.concurrent.Execution.Implicits._
 

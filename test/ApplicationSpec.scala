@@ -1,7 +1,8 @@
 import java.time.Clock
 
 import com.google.inject.{AbstractModule, Provides}
-import models.entities.{Supplier, SupplierRepository}
+import models.entities.Supplier
+import models.repos.SupplierRepository
 import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.test._
 import org.specs2.execute.Results

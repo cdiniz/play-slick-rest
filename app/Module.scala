@@ -1,7 +1,7 @@
 import com.google.inject.{AbstractModule, Inject, Provides}
 import java.time.Clock
 
-import models.entities.SupplierRepository
+import models.repos.SupplierRepository
 import play.api.{Configuration, Environment}
 import util.DBImplicits
 
