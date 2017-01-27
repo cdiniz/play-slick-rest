@@ -65,7 +65,8 @@ class ApplicationSpec extends PlaySpecification with Results with Matchers with 
 
     "send 201 when post to create a supplier with valid json" in {
       val (name,desc) = ("Apple","Shut up and take my money")
-      daoMock.save(any[Supplier])(any[ExecutionContext]).returns(DBIOAction.from(Future{Supplier(Some(1), name, desc)}))
+      val supplier = Supplier(None, name, desc)
+      daoMock.save(supplier).returns(DBIOAction.from(Future{supplier.copy(id = Some(1))}))
       route(application,
         FakeRequest(POST, "/supplier", FakeHeaders(("Content-type","application/json") :: Nil),
           JsObject(Seq("name" -> JsString(name),"desc" -> JsString(desc))))).map(
@@ -74,7 +75,8 @@ class ApplicationSpec extends PlaySpecification with Results with Matchers with 
 
     "send 500 when post to create a supplier with valid json" in {
       val (name,desc) = ("Apple","Shut up and take my money")
-      daoMock.save(any[Supplier])(any[ExecutionContext]).returns(DBIOAction.failed(new SlickException("test")))
+      val supplier = Supplier(None, name, desc)
+      daoMock.save(supplier).returns(DBIOAction.failed(new SlickException("test")))
       route(application,
         FakeRequest(POST, "/supplier", FakeHeaders(("Content-type","application/json") :: Nil),
           JsObject(Seq("name" -> JsString(name),"desc" -> JsString(desc))))).map(
