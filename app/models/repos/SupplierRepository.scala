@@ -6,9 +6,9 @@ import com.google.inject.Inject
 import models.entities.Supplier
 import play.api.db.slick.DatabaseConfigProvider
 import slick.ast.BaseTypedType
-import slick.driver.JdbcProfile
+import slick.jdbc.JdbcProfile
 
-class SupplierRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Repository[Supplier, Int](dbConfigProvider.get[JdbcProfile].driver) {
+class SupplierRepository @Inject()(dbConfigProvider: DatabaseConfigProvider) extends Repository[Supplier, Int](dbConfigProvider.get[JdbcProfile].profile) {
   import driver.api._
   val pkType = implicitly[BaseTypedType[Int]]
   val tableQuery = TableQuery[Suppliers]
